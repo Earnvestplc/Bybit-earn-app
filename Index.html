@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bybit Wallet UI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- My Assets Page -->
+        <div id="my-assets-page" class="page active">
+            <div class="header">
+                <span class="icon-placeholder"></span> <!-- For alignment -->
+                <div class="header-title">My Assets</div>
+                <i class="fas fa-bell header-icon"></i>
+            </div>
+            <div class="content my-assets-content">
+                <div class="total-assets">
+                    <i class="fas fa-eye eye-icon"></i>
+                    <div>
+                        <span class="total-value" id="total-assets-value">$13,489.02</span>
+                        <span class="currency-dropdown">USD <i class="fas fa-caret-down"></i></span>
+                    </div>
+                    <div class="btc-equivalent" id="btc-equivalent-value">0.000000 BTC <i class="fas fa-info-circle"></i></div>
+                </div>
+
+                <div class="balance-graph">
+                    <div class="graph-bar" id="balance-graph-bar" style="width: 0%;"></div>
+                    <span class="graph-value">0%</span>
+                </div>
+
+                <div class="time-filters">
+                    <button class="filter-btn active">1H</button>
+                    <button class="filter-btn">1D</button>
+                    <button class="filter-btn">1W</button>
+                    <button class="filter-btn">1M</button>
+                    <button class="filter-btn">1Y</button>
+                    <button class="filter-btn">ALL</button>
+                </div>
+                <p class="last-update">Last update: <span id="last-update-time">--:--:--</span></p>
+
+                <div class="my-card">
+                    <img src="https://placehold.co/40x40/e0e0e0/333333?text=Card" alt="Card Icon" class="card-icon">
+                    <span class="card-text">My Card</span>
+                    <span class="card-number">**** **** **** 8888</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn" id="deposit-fiat-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Deposit Fiat</span>
+                    </button>
+                    <button class="action-btn" id="withdrawal-fiat-btn">
+                        <i class="fas fa-money-check-alt"></i>
+                        <span>Withdrawal Fiat</span>
+                    </button>
+                    <button class="action-btn" id="transfer-btn">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transfer</span>
+                    </button>
+                    <button class="action-btn" id="convert-btn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Convert</span>
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn" id="buy-crypto-btn">
+                        <i class="fas fa-arrow-alt-circle-up"></i>
+                        <span>Buy Crypto</span>
+                    </button>
+                    <button class="action-btn" id="sell-crypto-btn">
+                        <i class="fas fa-arrow-alt-circle-down"></i>
+                        <span>Sell Crypto</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Lend</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-piggy-bank"></i>
+                        <span>Earn</span>
+                    </button>
+                </div>
+
+                <div class="account-asset-tabs">
+                    <button class="tab active">Account</button>
+                    <button class="tab">Assets</button>
+                </div>
+
+                <div class="funds-display" id="funds-display">
+                    <span class="funds-text">Total Funds</span>
+                    <span class="funds-value">$13,489.02 <i class="fas fa-chevron-right"></i></span>
+                </div>
+            </div>
+        </div>
+                <!-- Select Payment Method Page -->
+        <div id="select-payment-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Select Payment Method</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content">
+                <div class="buy-crypto-fiat">
+                    <h3>Buy Fiat</h3>
+                    <span class="currency-selector">USD <i class="fas fa-caret-down"></i></span>
+                </div>
+
+                <button class="payment-btn" id="deposit-pix-option">
+                    <i class="fas fa-qrcode"></i>
+                    <div class="btn-text">
+                        <h3>PIX Deposit</h3>
+                        <span>Instant transfer with zero fees</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <button class="payment-btn" id="deposit-usdt-option">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div class="btn-text">
+                        <h3>Deposit USDT</h3>
+                        <span>Transfer from other exchanges or wallets</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <button class="payment-btn">
+                    <i class="fas fa-credit-card"></i>
+                    <div class="btn-text">
+                        <h3>Credit/Debit Card</h3>
+                        <span>Instantly buy with your card</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <button class="payment-btn">
+                    <i class="fas fa-bank"></i>
+                    <div class="btn-text">
+                        <h3>Bank Transfer (SEPA)</h3>
+                        <span>Deposit EUR via SEPA</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Deposit PIX Value Page -->
+        <div id="deposit-pix-value-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Deposit PIX</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content">
+                <div class="input-group">
+                    <label for="pix-deposit-amount">Amount</label>
+                    <div class="input-field-with-currency">
+                        <input type="text" id="pix-deposit-amount" placeholder="0.00">
+                        <span class="currency-tag">BRL <i class="fas fa-caret-down"></i></span>
+                        <i class="fas fa-times-circle clear-input" id="clear-pix-input"></i>
+                    </div>
+                </div>
+
+                <div class="payment-method-section">
+                    <h4>Payment Method</h4>
+                    <div class="method-option active">
+                        <i class="fas fa-qrcode method-icon"></i>
+                        <div class="method-details">
+                            <span>PIX Transfer</span>
+                            <span class="zero-taxes">Zero taxes</span>
+                            <span class="real-time">Real time</span>
+                        </div>
+                        <i class="fas fa-check-circle radio-icon"></i>
+                    </div>
+                    <!-- Other potential methods could go here -->
+                </div>
+
+                <div class="deposit-summary">
+                    <div class="summary-header">
+                        <h3>Deposit Summary</h3>
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="summary-item">
+                        <span>Amount</span>
+                        <span>R$ <span id="deposit-amount-summary">0.00</span></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Fee</span>
+                        <span>R$ <span id="deposit-fee-summary">0.00</span></span>
+                    </div>
+                    <div class="total-pay">
+                        <span>Total to Pay</span>
+                        <span>R$ <span id="total-pay-value">0.00</span></span>
+                    </div>
+                </div>
+
+                <button class="bottom-button" id="confirm-deposit-btn">Confirm Deposit</button>
+            </div>
+        </div>
+
+        <!-- Deposit PIX QR Page -->
+        <div id="deposit-pix-qr-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Deposit PIX</div>
+                <i class="fas fa-question-circle header-icon"></i>
+            </div>
+            <div class="content pix-qr-content">
+                <div class="deposit-details">
+                    <div class="detail-row">
+                        <span>Deposit Amount</span>
+                        <span>R$ <span id="pix-deposit-amount-qr">0.00</span></span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Fee</span>
+                        <span>R$ <span id="pix-deposit-fee-qr">0.00</span></span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Total Amount</span>
+                        <span>R$ <span id="pix-total-amount-qr">0.00</span></span>
+                    </div>
+                </div>
+
+                <div class="tabs-small" id="pix-qr-tabs">
+                    <button class="tab active">Scan QR Code</button>
+                    <button class="tab">Copy Key</button>
+                </div>
+
+                <div class="qr-code-section">
+                    <img src="https://placehold.co/180x180/e0e0e0/333333?text=PIX+QR" alt="PIX QR Code" class="qr-image" id="pix-qr-code-img">
+                    <p class="scan-qr-instruction">Scan the QR Code to complete the payment</p>
+                    <div class="qr-actions">
+                        <button class="secondary-btn" id="save-qr-btn"><i class="fas fa-download"></i> Save QR</button>
+                        <button class="secondary-btn" id="share-qr-btn"><i class="fas fa-share-alt"></i> Share QR</button>
+                    </div>
+                </div>
+
+                <div class="notice-box">
+                    <h4>Important Notice</h4>
+                    <p>Only transfer from an account with the same CPF/CNPJ. Transfers from third-party accounts will result in a refund within 3 business days.</p>
+                </div>
+
+                <div class="input-group">
+                    <label>PIX Payment Code</label>
+                    <div class="input-field-with-currency">
+                        <input type="text" id="pix-payment-code-text" value="Loading PIX Code..." readonly>
+                        <i class="fas fa-copy copy-icon" id="copy-pix-code-btn"></i>
+                    </div>
+                </div>
+
+                <div class="help-links">
+                    Need help? <a href="#">Tutorial <i class="fas fa-chevron-right"></i></a> | <a href="#">Contact Support <i class="fas fa-chevron-right"></i></a>
+                </div>
+
+                <div class="service-provider">
+                    Payment service provider: Settle Network
+                </div>
+
+                <div class="bottom-action-buttons">
+                    <button class="bottom-button" id="deposit-completed-btn">Deposit Completed</button>
+                </div>
+            </div>
+                      </div>
+                                                              <!-- Deposit USDT Page -->
+        <div id="deposit-usdt-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Deposit USDT</div>
+                <i class="fas fa-question-circle header-icon"></i>
+            </div>
+            <div class="content usdt-deposit-content">
+                <div class="qr-code-section-large">
+                    <img src="https://placehold.co/220x220/e0e0e0/333333?text=USDT+QR" alt="USDT QR Code" class="qr-image-large" id="usdt-qr-code-img">
+                </div>
+
+                <div class="wallet-address-box">
+                    <h4>Wallet Address</h4>
+                    <span id="usdt-wallet-address">Loading Address...</span>
+                    <i class="fas fa-copy copy-icon" id="copy-usdt-address-btn"></i>
+                </div>
+
+                <div class="deposit-info">
+                    <div class="info-item">
+                        <span>Network</span>
+                        <span>TRC20 (TRON) <i class="fas fa-info-circle"></i></span>
+                    </div>
+                    <div class="info-item">
+                        <span>Minimum Deposit</span>
+                        <span>1.00 USDT</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Expected Arrival</span>
+                        <span>5-10 Minutes</span>
+                    </div>
+                    <div class="info-item">
+                        <span>Number of Confirmations</span>
+                        <span>20 (Network Confirmation)</span>
+                    </div>
+                </div>
+
+                <div class="deposit-links">
+                    <a href="#">What is TRC20?</a> | <a href="#">Deposit FAQs</a>
+                </div>
+
+                <div class="disclaimer-box">
+                    <p>Please note that only USDT deposits are supported on this address. Any other coin or token deposited to this address will be lost permanently.</p>
+                    <p>TRC20 is the only supported network for USDT deposits to this address. Do not use ERC20, OMNI, or other networks.</p>
+                </div>
+
+                <div class="bottom-buttons-two">
+                    <button class="secondary-btn" id="save-qr-to-photo-btn"><i class="fas fa-image"></i> Save to Photos</button>
+                    <button class="primary-btn" id="deposit-usdt-done-btn">Done</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Photo Modal -->
+        <div id="saved-photo-modal" class="modal-overlay">
+            <div class="modal-content">
+                <i class="fas fa-times close-modal-button"></i>
+                <div class="modal-header">
+                    <h4>QR Code Saved to Photos</h4>
+                </div>
+                <div class="saved-photo-card">
+                    <h3>Deposit USDT</h3>
+                    <div class="network-info">
+                        Network: <span class="network-name">TRC20</span>
+                    </div>
+                    <img src="https://placehold.co/150x150/e0e0e0/333333?text=Saved+QR" alt="Saved QR Code" class="saved-qr-image" id="saved-photo-qr-image">
+                    <div class="wallet-address-saved">
+                        <h4>Wallet Address</h4>
+                        <span id="saved-photo-address">Loading Address...</span>
+                    </div>
+                    <p class="save-date">Saved on: <span id="saved-date">July 5, 2025</span></p>
+                    <img src="https://placehold.co/80x25/e0e0e0/333333?text=Logo" alt="Bybit Logo" class="bybit-logo">
+                </div>
+
+                <div class="theme-buttons">
+                    <button class="theme-btn active">Light Theme</button>
+                    <button class="theme-btn">Dark Theme</button>
+                </div>
+
+                <button class="download-image" id="download-qr-image">
+                    <i class="fas fa-download"></i> Download Image
+                </button>
+            </div>
+        </div>
+
+        <!-- Fiat Withdrawal Page -->
+        <div id="fiat-withdrawal-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Fiat Withdrawal</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content">
+                <div class="input-group">
+                    <label for="withdrawal-amount">Amount</label>
+                    <div class="input-field-with-currency">
+                        <input type="text" id="withdrawal-amount" placeholder="0.00">
+                        <span class="currency-tag">USD <i class="fas fa-caret-down"></i></span>
+                        <i class="fas fa-times-circle clear-input" id="clear-withdrawal-input"></i>
+                    </div>
+                </div>
+                <div class="balance-info">
+                    <span>Available: <span id="available-balance-text">13,489.02 USD</span></span>
+                    <span><i class="fas fa-info-circle"></i></span>
+                </div>
+
+                <div class="payment-method-section">
+                    <h4>Withdrawal Method</h4>
+                    <div class="method-option active">
+                        <i class="fas fa-bank method-icon"></i>
+                        <div class="method-details">
+                            <span>Bank Transfer (Local)</span>
+                            <span class="real-time">Standard processing</span>
+                        </div>
+                        <i class="fas fa-check-circle radio-icon"></i>
+                    </div>
+                    <!-- Other potential withdrawal methods could go here -->
+                </div>
+
+                <div class="deposit-summary">
+                    <div class="summary-header">
+                        <h3>Withdrawal Summary</h3>
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="summary-item">
+                        <span>Amount</span>
+                        <span>$ <span id="withdrawal-amount-summary">0.00</span></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Fee</span>
+                        <span>$ <span id="withdrawal-fee-summary">0.00</span></span>
+                    </div>
+                    <div class="total-pay">
+                        <span>Total to Receive</span>
+                        <span>$ <span id="total-receive-value">0.00</span></span>
+                    </div>
+                </div>
+
+                <button class="bottom-button" id="withdrawal-confirm-btn">Confirm Withdrawal</button>
+            </div>
+        </div>
+
+        <!-- NEW: Withdrawal Confirmation Page -->
+        <div id="withdrawal-confirmation-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Security Deposit</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content withdrawal-confirmation-content">
+                <div class="confirmation-message-box">
+                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                    <p>To proceed with your withdrawal, a security deposit is required.</p>
+                    <p>Please deposit <strong>$ <span id="deposit-amount-usd">0.00</span> USD</strong> (equivalent to <span id="deposit-amount-brl">200 BRL</span>) within the next <span id="countdown-timer">05:00:00</span>.</p>
+                    <p class="small-text">This deposit ensures the security of your account and will be fully refundable upon successful withdrawal processing.</p>
+                </div>
+
+                <div class="countdown-display">
+                    <i class="fas fa-clock"></i>
+                    <span>Time Remaining: <span id="countdown-display-text">05:00:00</span></span>
+                </div>
+
+                <button class="bottom-button" id="proceed-to-deposit-btn">Proceed to Deposit</button>
+            </div>
+        </div>
+                <!-- Transfer Page -->
+        <div id="transfer-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Transfer</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content">
+                <div class="transfer-tabs" id="transfer-tabs">
+                    <button class="tab active" data-target="internal-transfer-section">Internal Transfer</button>
+                    <button class="tab" data-target="external-transfer-section">External Transfer</button>
+                </div>
+
+                <!-- Internal Transfer Section (default active) -->
+                <div id="internal-transfer-section" class="transfer-section active">
+                    <div class="transfer-from-to">
+                        <div class="transfer-item">
+                            <span>From</span>
+                            <div class="account-select">
+                                <span class="account-name" id="transfer-from-account">Funding Account</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <i class="fas fa-sync-alt transfer-arrow" id="transfer-swap-icon"></i>
+                        <div class="transfer-item">
+                            <span>To</span>
+                            <div class="account-select">
+                                <span class="account-name" id="transfer-to-account">Spot Account</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="currency-select-box">
+                        <h4>Currency</h4>
+                        <div class="currency-option" id="transfer-currency-option">
+                            <img src="https://placehold.co/28x28/e0e0e0/333333?text=USDT" alt="USDT Icon" class="currency-icon" id="transfer-currency-icon">
+                            <span class="currency-name" id="transfer-currency-name">USDT</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+
+                    <div class="amount-input-section">
+                        <h4>Amount</h4>
+                        <div class="amount-input-field">
+                            <input type="text" id="transfer-amount-input" placeholder="0.00">
+                            <span class="max-button" id="transfer-max-button">Max</span>
+                            <span class="currency-label-input" id="transfer-currency-label">USDT</span>
+                        </div>
+                        <p class="available-balance" id="transfer-available-balance">Available: 0.00 USDT</p>
+                    </div>
+
+                    <button class="bottom-button" id="transfer-confirm-btn">Confirm Transfer</button>
+                </div>
+
+                <!-- External Transfer Section (hidden by default) - Placeholder for future implementation -->
+                <div id="external-transfer-section" class="transfer-section">
+                    <p>External transfer functionality would be displayed here.</p>
+                    <p>e.g., Send crypto to an external wallet address.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Convert Page -->
+        <div id="convert-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Convert</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content">
+                <div class="convert-tabs" id="convert-tabs">
+                    <button class="tab active">Spot Account</button>
+                    <button class="tab">Funding Account</</button>
+                    <button class="tab">Unified Trading Account</button>
+                </div>
+
+                <div class="convert-account-info">
+                    <span>Account</span>
+                    <span class="account-name">Spot Account <i class="fas fa-caret-down"></i></span>
+                </div>
+
+                <div class="convert-pair-selection">
+                    <div class="currency-input-group">
+                        <div class="currency-display" id="convert-from-currency-display">
+                            <img src="https://placehold.co/28x28/e0e0e0/333333?text=USDT" alt="USDT Icon" class="currency-icon" id="convert-from-currency-icon">
+                            <span class="currency-name" id="convert-from-currency-name">USDT</span>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                        <input type="text" id="convert-from-input" placeholder="0.00">
+                        <span class="max-text" id="convert-max-btn">Max</span>
+                    </div>
+
+                    <i class="fas fa-exchange-alt convert-swap-icon" id="convert-swap-icon"></i>
+
+                    <div class="currency-input-group">
+                        <div class="currency-display" id="convert-to-currency-display">
+                            <img src="https://placehold.co/28x28/e0e0e0/333333?text=BTC" alt="BTC Icon" class="currency-icon" id="convert-to-currency-icon">
+                            <span class="currency-name" id="convert-to-currency-name">BTC</span>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                        <input type="text" id="convert-to-input" placeholder="0.00" readonly>
+                        <span class="range">+/-0.1%</span>
+                    </div>
+
+                    <div class="conversion-rate">
+                        <span>Rate</span>
+                        <span id="conversion-rate-text">Enter amount to see rate</span>
+                    </div>
+                    <div class="fees-section">
+                        <span>Fees</span>
+                        <span id="conversion-fees-text">0.00%</span>
+                    </div>
+                    <div class="receive-section">
+                        <span>You will receive</span>
+                        <span id="conversion-receive-text">0.00 BTC</span>
+                    </div>
+                </div>
+
+                <button class="bottom-button" id="convert-confirm-btn">Confirm Conversion</button>
+            </div>
+        </div>
+                <!-- Buy/Sell Crypto Page -->
+        <div id="buy-sell-crypto-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Buy/Sell Crypto</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content buy-sell-content">
+                <div class="buy-sell-tabs" id="buy-sell-tabs">
+                    <button class="tab active">Buy</button>
+                    <button class="tab">Sell</button>
+                </div>
+
+                <div class="currency-selector-header">
+                    <img src="https://placehold.co/35x35/e0e0e0/333333?text=USDT" alt="Currency Icon" class="currency-icon-large" id="buy-sell-currency-icon">
+                    <span class="currency-name-large" id="buy-sell-currency-name">USDT</span>
+                    <i class="fas fa-caret-down"></i>
+                    <button class="by-value-btn" id="buy-sell-type-selector">By Value <i class="fas fa-caret-down"></i></button>
+                </div>
+
+                <div class="amount-input-buy-sell">
+                    <span class="currency-label">USD</span>
+                    <span class="amount-value" id="buy-sell-amount">0</span><i class="fas fa-caret-down"></i>
+                    <p class="range-info">Min: 10 USD, Max: 20,000 USD</p>
+                </div>
+
+                <div class="exchange-rate">
+                    <span>1 USDT ≈ 1.00 USD</span>
+                    <span class="vip-benefits">VIP Benefits <i class="fas fa-info-circle"></i></span>
+                </div>
+
+                <div class="auto-invest-btn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Auto-Invest</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+
+                <div class="number-pad">
+                    <button class="num-btn">1</button>
+                    <button class="num-btn">2</button>
+                    <button class="num-btn">3</button>
+                    <button class="num-btn">4</button>
+                    <button class="num-btn">5</button>
+                    <button class="num-btn">6</button>
+                    <button class="num-btn">7</button>
+                    <button class="num-btn">8</button>
+                    <button class="num-btn">9</button>
+                    <button class="num-btn" id="dot-btn">.</button>
+                    <button class="num-btn">0</button>
+                    <button class="num-btn backspace-btn" id="backspace-btn"><i class="fas fa-backspace"></i></button>
+                </div>
+
+                <button class="bottom-button" id="buy-sell-confirm-btn">Buy USDT</button>
+            </div>
+        </div>
+
+        <!-- Crypto/Fiat Selection Page -->
+        <div id="crypto-fiat-selection-page" class="page">
+            <div class="search-header">
+                <input type="text" placeholder="Search" id="selection-search-input">
+                <button class="cancel-search" id="cancel-search-btn">Cancel</button>
+            </div>
+            <div class="header"> <!-- Re-using header style for title only -->
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title" id="selection-header-title">Select Crypto</div>
+                <div class="currency-tabs" id="currency-selection-tabs">
+                    <button class="tab active" data-type="crypto">Crypto</button>
+                    <button class="tab" data-type="fiat">Fiat</button>
+                </div>
+            </div>
+            <div class="content selection-list" id="selection-list-container">
+                <!-- List items will be dynamically loaded here by JS -->
+            </div>
+        </div>
+
+        <!-- Asset History Page -->
+        <div id="asset-history-page" class="page">
+            <div class="header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <div class="header-title">Asset History</div>
+                <span class="icon-placeholder"></span>
+            </div>
+            <div class="content asset-history-content">
+                <div class="history-tabs" id="history-tabs">
+                    <button class="tab active">All</button>
+                    <button class="tab">Deposit</button>
+                    <button class="tab">Withdrawal</button>
+                    <button class="tab">Transfer</button>
+                    <button class="tab">Convert</button>
+                    <button class="tab">Trade</button>
+                </div>
+
+                <div class="filter-row">
+                    <div class="filter-dropdown">
+                        <span>All Types</span>
+                        <i class="fas fa-caret-down"></i>
+                    </div>
+                    <div class="filter-dropdown">
+                        <span>Last 30 Days</span>
+                        <i class="fas fa-caret-down"></i>
+                    </div>
+                </div>
+
+                <div class="no-data-message" id="no-history-data">
+                    <i class="fas fa-folder-open no-data-icon"></i>
+                    <p>No history for this period.</p>
+                    <a href="#">Learn about deposits and withdrawals <i class="fas fa-chevron-right"></i></a>
+                </div>
+
+                <!-- History items would be dynamically loaded here -->
+            </div>
+        </div>
+
+    </div> <!-- End .app-container -->
+
+    <script src="script.js"></script>
+</body>
+</html>
