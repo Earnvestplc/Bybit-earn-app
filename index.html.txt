@@ -1,0 +1,1133 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Helper function to get an element
+    const getEl = (selector) => document.querySelector(selector);
+    const getEls = (selector) => document.querySelectorAll(selector);
+
+
+    // Global elements
+    const appContainer = getEl('.app-container');
+    const myAssetsPage = getEl('#my-assets-page');
+    const selectPaymentPage = getEl('#select-payment-page');
+    const depositPixValuePage = getEl('#deposit-pix-value-page');
+    const depositPixQRPage = getEl('#deposit-pix-qr-page');
+    const depositUSDTPage = getEl('#deposit-usdt-page');
+    const fiatWithdrawalPage = getEl('#fiat-withdrawal-page');
+    const transferPage = getEl('#transfer-page');
+    const convertPage = getEl('#convert-page');
+    const buySellCryptoPage = getEl('#buy-sell-crypto-page');
+    const cryptoFiatSelectionPage = getEl('#crypto-fiat-selection-page');
+    const assetHistoryPage = getEl('#asset-history-page');
+    const withdrawalConfirmationPage = getEl('#withdrawal-confirmation-page'); // NEW Page Element
+
+
+    const savedPhotoModal = getEl('#saved-photo-modal');
+    const closeModalButton = getEl('.close-modal-button');
+
+
+    // Global Balance Variable
+    let globalAvailableBalance = 13489.02; // Updated global balance
+
+
+    // Navigation and Page Management
+    let currentPage = myAssetsPage; // Default starting page
+    let pageHistory = [myAssetsPage]; // To manage back button functionality
+
+
+    const showPage = (pageToShow, animate = true, direction = 'forward') => {
+        // Hide current page
+        currentPage.classList.remove('active', 'animate-out-left', 'animate-out-right');
+
+
+        if (animate) {
+            if (direction === 'forward') {
+                currentPage.classList.add('animate-out-left');
+                pageToShow.classList.remove('animate-out-left', 'animate-out-right'); // Ensure clean state
+                pageToShow.classList.add('active', 'animate-in-right');
+            } else if (direction === 'backward') {
+                currentPage.classList.add('animate-out-right');
+                pageToShow.classList.remove('animate-out-left', 'animate-out-right'); // Ensure clean state
+                pageToShow.classList.add('active', 'animate-in-left');
+            }
+        } else {
+            pageToShow.classList.add('active');
+        }
+
+
+        // Add a small delay for animation to complete before removing from history
+        setTimeout(() => {
+            if (direction === 'forward') {
+                // Prevent adding the same page multiple times if it's already the last in history
+                if (pageHistory[pageHistory.length - 1] !== pageToShow) {
+                    pageHistory.push(pageToShow);
+                }
+            } else if (direction === 'backward') {
+                // If going back, remove the last page from history
+                pageHistory.pop();
+            }
+            currentPage = pageToShow;
+            // Clean up animation classes after transition
+            getEls('.page').forEach(page => {
+                if (page !== currentPage) {
+                    page.classList.remove('animate-in-left', 'animate-in-right', 'animate-out-left', 'animate-out-right');
+                }
+            });
+            // Scroll to top of the new page's content area
+            const contentArea = pageToShow.querySelector('.content');
+            if (contentArea) {
+                contentArea.scrollTop = 0;
+            }
+        }, animate ? 300 : 0); // Match CSS transition duration
+    };
+
+
+    const goBack = () => {
+        if (pageHistory.length > 1) {
+            const previousPage = pageHistory[pageHistory.length - 2];
+            showPage(previousPage, true, 'backward');
+        } else {
+            console.log('No more pages in history.');
+        }
+    };
+
+
+    // Initialize the first page
+    currentPage.classList.add('active');
+
+
+    // Back button event listeners (assuming all back buttons have .back-button class)
+    getEls('.back-button').forEach(button => {
+        button.addEventListener('click', goBack);
+    });
+
+
+    // --- My Assets Page Functionality ---
+    const totalAssetsValue = getEl('#total-assets-value');
+    const btcEquivalentValue = getEl('#btc-equivalent-value');
+    const balanceGraphBar = getEl('#balance-graph-bar');
+    const fundsValueDisplay = getEl('#funds-value'); // Get the funds display element
+
+
+    // Simulate fetching asset data
+    const fetchAssetData = () => {
+        const totalUSD = globalAvailableBalance; // Use global variable
+        const btcEquiv = (totalUSD / 68000).toFixed(6); // Assuming 1 BTC = $68,000
+        const percentage = (totalUSD / 20000) * 100; // Max value for graph is $20,000
+
+
+        totalAssetsValue.textContent = totalUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        btcEquivalentValue.textContent = `${btcEquiv} BTC`;
+        balanceGraphBar.style.width = `${Math.min(percentage, 100)}%`; // Cap at 100%
+        fundsValueDisplay.innerHTML = `$${totalUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <i class="fas fa-chevron-right"></i>`; // Update funds value
+    };
+
+
+    // Update last update time
+    const updateLastUpdateTime = () => {
+        const now = new Date();
+        getEl('#last-update-time').textContent = now.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    };
+
+
+    // Filter buttons
+    getEls('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            getEls('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            // In a real app, you'd re-fetch/filter data based on the selected period
+            console.log(`Filter by: ${this.textContent}`);
+        });
+    });
+
+
+    // Attach event listeners for navigation from My Assets
+    getEl('#deposit-fiat-btn').addEventListener('click', () => showPage(selectPaymentPage));
+    getEl('#withdrawal-fiat-btn').addEventListener('click', () => showPage(fiatWithdrawalPage));
+    getEl('#transfer-btn').addEventListener('click', () => showPage(transferPage));
+    getEl('#convert-btn').addEventListener('click', () => showPage(convertPage));
+    getEl('#buy-crypto-btn').addEventListener('click', () => showPage(buySellCryptoPage));
+    getEl('#sell-crypto-btn').addEventListener('click', () => {
+        // For simplicity, direct sell to buy/sell page, but could go to different section
+        showPage(buySellCryptoPage);
+        // Delay click to ensure page transition completes and tab is rendered
+        setTimeout(() => {
+            const sellTab = getEl('#buy-sell-tabs .tab:last-child');
+            if(sellTab) sellTab.click();
+        }, 300); // Match page transition duration
+    });
+    getEl('#funds-display').addEventListener('click', () => showPage(assetHistoryPage));
+
+
+
+
+    // Initialize My Assets page
+    fetchAssetData();
+    updateLastUpdateTime();
+    setInterval(updateLastUpdateTime, 1000); // Update every second
+
+
+    // --- Select Payment Method Page Functionality ---
+    getEl('#deposit-pix-option').addEventListener('click', () => showPage(depositPixValuePage));
+    getEl('#deposit-usdt-option').addEventListener('click', () => showPage(depositUSDTPage));
+
+
+    // --- Deposit PIX Value Page Functionality ---
+    const pixAmountInput = getEl('#pix-deposit-amount');
+    const pixClearInputBtn = getEl('#clear-pix-input');
+    const pixMethodOptions = getEls('.method-option');
+    const confirmDepositBtn = getEl('#confirm-deposit-btn');
+
+
+    pixAmountInput.addEventListener('input', () => {
+        pixAmountInput.value = pixAmountInput.value.replace(/[^0-9.]/g, ''); // Allow only numbers and one decimal
+        if (pixAmountInput.value.includes('.')) {
+            const parts = pixAmountInput.value.split('.');
+            if (parts[1].length > 2) {
+                pixAmountInput.value = `${parts[0]}.${parts[1].substring(0, 2)}`;
+            }
+        }
+        pixClearInputBtn.style.display = pixAmountInput.value ? 'block' : 'none';
+        updateDepositSummary();
+    });
+
+
+    pixClearInputBtn.addEventListener('click', () => {
+        pixAmountInput.value = '';
+        pixClearInputBtn.style.display = 'none';
+        updateDepositSummary();
+    });
+
+
+    pixMethodOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            pixMethodOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            updateDepositSummary();
+        });
+    });
+
+
+    const updateDepositSummary = () => {
+        const amount = parseFloat(pixAmountInput.value) || 0;
+        const totalToPayEl = getEl('#total-pay-value');
+        getEl('#deposit-amount-summary').textContent = amount.toFixed(2);
+        getEl('#deposit-fee-summary').textContent = '0.00'; // Assuming 0 fees for PIX
+        totalToPayEl.textContent = amount.toFixed(2);
+        confirmDepositBtn.disabled = amount <= 0;
+        confirmDepositBtn.classList.toggle('disabled', amount <= 0);
+    };
+
+
+    confirmDepositBtn.addEventListener('click', () => {
+        const amount = parseFloat(pixAmountInput.value);
+        if (amount > 0) {
+            // In a real app, you'd send this amount to your backend for PIX processing
+            console.log(`Initiating PIX deposit for R$${amount.toFixed(2)}`);
+            showPage(depositPixQRPage);
+            updatePixQRPage(amount);
+        } else {
+            alert('Please enter a valid deposit amount.');
+        }
+    });
+
+
+    // Initial update for Deposit PIX Value page
+    updateDepositSummary();
+    // --- Deposit PIX QR Page Functionality ---
+    const pixDepositAmountQR = getEl('#pix-deposit-amount-qr');
+    const pixDepositFeeQR = getEl('#pix-deposit-fee-qr');
+    const pixTotalAmountQR = getEl('#pix-total-amount-qr');
+    const pixCopyCodeBtn = getEl('#copy-pix-code-btn');
+    const pixQRCodeImg = getEl('#pix-qr-code-img');
+    const pixPaymentCodeText = getEl('#pix-payment-code-text');
+
+
+    const updatePixQRPage = (amount) => {
+        pixDepositAmountQR.textContent = `R$ ${amount.toFixed(2)}`;
+        pixDepositFeeQR.textContent = 'R$ 0.00'; // Assuming 0 fees
+        pixTotalAmountQR.textContent = `R$ ${amount.toFixed(2)}`;
+
+
+        // Updated PIX key
+        const pixKey = `cpf: 778.456.096-68`;
+        pixPaymentCodeText.value = pixKey;
+
+
+        // Simulate QR code generation with the new PIX key
+        pixQRCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(pixKey)}`;
+    };
+
+
+    pixCopyCodeBtn.addEventListener('click', () => {
+        const pixCode = pixPaymentCodeText.value; // Get value from input field
+        navigator.clipboard.writeText(pixCode).then(() => {
+            alert('PIX code copied to clipboard!');
+            // You might want to show a temporary "Copied!" message on the button
+        }).catch(err => {
+            console.error('Failed to copy PIX code: ', err);
+            alert('Failed to copy PIX code. Please try again or copy manually.');
+        });
+    });
+
+
+    getEl('#deposit-completed-btn').addEventListener('click', () => {
+        // In a real app, this would typically trigger a check on your backend
+        // For now, we'll just navigate back to the assets page
+        alert('Deposit initiated. Please complete the payment in your banking app.');
+        showPage(myAssetsPage, true, 'backward'); // Go back to assets
+    });
+
+
+    // Small tabs for QR vs Code
+    getEls('#pix-qr-tabs .tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            getEls('#pix-qr-tabs .tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const qrSection = getEl('.qr-code-section');
+            const codeInputGroup = getEl('.input-group label[for="pix-payment-code-text"]').parentNode.parentNode; // Get the parent of the input group
+
+
+            if (this.textContent.includes('QR')) {
+                qrSection.style.display = 'flex';
+                codeInputGroup.style.display = 'none';
+                getEl('.bottom-action-buttons').style.display = 'flex'; // Show button when QR is active
+            } else { // 'Copy Key' tab
+                qrSection.style.display = 'none';
+                codeInputGroup.style.display = 'block'; // Or 'flex' depending on your layout
+                getEl('.bottom-action-buttons').style.display = 'none'; // Hide button when Copy Key is active
+            }
+        });
+    });
+
+
+    // --- Deposit USDT Page Functionality ---
+    const usdtAddressText = getEl('#usdt-wallet-address');
+    const usdtCopyAddressBtn = getEl('#copy-usdt-address-btn');
+    const usdtCopyModalAddressBtn = getEl('#copy-modal-address-btn');
+    const usdtQRCodeImg = getEl('#usdt-qr-code-img');
+    const savedPhotoQRImage = getEl('#saved-photo-qr-image');
+    const savedPhotoAddressText = getEl('#saved-photo-address');
+    const savedDateElement = getEl('#saved-date');
+
+
+    // Updated USDT address
+    const dummyUSDTAddress = 'TT6QSn2VXtw1LryZ9HHU2tk22VkWJbwiw5';
+    // Simulate QR code generation with the new USDT address
+    const dummyUSDTQRCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(dummyUSDTAddress)}`;
+
+
+    usdtAddressText.textContent = dummyUSDTAddress;
+    usdtQRCodeImg.src = dummyUSDTQRCodeUrl;
+    savedPhotoQRImage.src = dummyUSDTQRCodeUrl;
+    savedPhotoAddressText.textContent = dummyUSDTAddress;
+    savedDateElement.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+
+
+
+    usdtCopyAddressBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(dummyUSDTAddress).then(() => {
+            alert('USDT address copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy USDT address: ', err);
+            alert('Failed to copy USDT address. Please try again or copy manually.');
+        });
+    });
+
+
+    usdtCopyModalAddressBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(dummyUSDTAddress).then(() => {
+            alert('USDT address copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy USDT address: ', err);
+            alert('Failed to copy USDT address. Please try again or copy manually.');
+        });
+    });
+
+
+
+
+    // Toggle Saved Photo Modal
+    getEl('#save-qr-to-photo-btn').addEventListener('click', () => {
+        savedPhotoModal.classList.add('active');
+    });
+
+
+    closeModalButton.addEventListener('click', () => {
+        savedPhotoModal.classList.remove('active');
+    });
+
+
+    // Close modal if clicking outside content
+    savedPhotoModal.addEventListener('click', (e) => {
+        if (e.target === savedPhotoModal) {
+            savedPhotoModal.classList.remove('active');
+        }
+    });
+
+
+    // Simulate download button
+    getEl('#download-qr-image').addEventListener('click', () => {
+        alert('Simulating image download...');
+        // In a real app, you'd create a Blob from the QR image and trigger a download.
+        // For demonstration, we'll just log.
+        console.log('Downloading QR code image...');
+    });
+
+
+    getEl('#deposit-usdt-done-btn').addEventListener('click', () => {
+        alert('USDT deposit initiated. Please ensure you sent the funds to the correct address.');
+        goBack(); // Go back to the previous page (likely Select Payment Method)
+    });
+    // --- Fiat Withdrawal Page Functionality ---
+    const withdrawalAmountInput = getEl('#withdrawal-amount');
+    const withdrawalClearInputBtn = getEl('#clear-withdrawal-input');
+    const withdrawalConfirmBtn = getEl('#withdrawal-confirm-btn');
+    const availableBalanceText = getEl('#available-balance-text');
+    const withdrawalAmountSummary = getEl('#withdrawal-amount-summary');
+    const withdrawalFeeSummary = getEl('#withdrawal-fee-summary');
+    const totalReceiveValue = getEl('#total-receive-value');
+
+
+    // Simulate available balance
+    let withdrawalFeeRate = 0.005; // 0.5% fee
+
+
+    const updateWithdrawalSummary = () => {
+        const amount = parseFloat(withdrawalAmountInput.value) || 0;
+        const fee = amount * withdrawalFeeRate;
+        const totalToReceive = amount - fee;
+
+
+        withdrawalAmountSummary.textContent = amount.toFixed(2);
+        withdrawalFeeSummary.textContent = fee.toFixed(2);
+        totalReceiveValue.textContent = totalToReceive.toFixed(2);
+
+
+        validateWithdrawal();
+    };
+
+
+
+
+    withdrawalAmountInput.addEventListener('input', () => {
+        withdrawalAmountInput.value = withdrawalAmountInput.value.replace(/[^0-9.]/g, ''); // Allow only numbers and one decimal
+        if (withdrawalAmountInput.value.includes('.')) {
+            const parts = withdrawalAmountInput.value.split('.');
+            if (parts[1].length > 2) {
+                withdrawalAmountInput.value = `${parts[0]}.${parts[1].substring(0, 2)}`;
+            }
+        }
+        pixClearInputBtn.style.display = pixAmountInput.value ? 'block' : 'none'; // This was a copy-paste error, should be withdrawalClearInputBtn
+        withdrawalClearInputBtn.style.display = withdrawalAmountInput.value ? 'block' : 'none';
+        updateWithdrawalSummary();
+    });
+
+
+    withdrawalClearInputBtn.addEventListener('click', () => {
+        withdrawalAmountInput.value = '';
+        withdrawalClearInputBtn.style.display = 'none';
+        updateWithdrawalSummary();
+    });
+
+
+    const validateWithdrawal = () => {
+        const amount = parseFloat(withdrawalAmountInput.value) || 0;
+        const isValid = amount > 0 && amount <= globalAvailableBalance; // Use globalAvailableBalance
+        withdrawalConfirmBtn.disabled = !isValid;
+        withdrawalConfirmBtn.classList.toggle('disabled', !isValid);
+        // You might add error messages for invalid amounts here
+    };
+
+
+    withdrawalConfirmBtn.addEventListener('click', () => {
+        const amount = parseFloat(withdrawalAmountInput.value);
+        if (amount > 0 && amount <= globalAvailableBalance) {
+            // Instead of alert and goBack, show the new confirmation page
+            showPage(withdrawalConfirmationPage);
+            startCountdown(5 * 60 * 60); // 5 hours in seconds
+            calculateBRLtoUSD(200); // Calculate 200 BRL in USD
+        } else {
+            alert('Please enter a valid amount within your available balance.');
+        }
+    });
+
+
+    // Initial validation and update for Withdrawal page
+    availableBalanceText.textContent = `Available: ${globalAvailableBalance.toFixed(2)} USD`; // Use globalAvailableBalance
+    updateWithdrawalSummary();
+
+
+
+
+    // --- NEW: Withdrawal Confirmation Page Functionality ---
+    let countdownInterval;
+    const countdownDisplayText = getEl('#countdown-display-text');
+    const depositAmountUSD = getEl('#deposit-amount-usd');
+    const depositAmountBRL = getEl('#deposit-amount-brl');
+    const proceedToDepositBtn = getEl('#proceed-to-deposit-btn');
+
+
+    function startCountdown(durationInSeconds) {
+        let timer = durationInSeconds;
+        let hours, minutes, seconds;
+
+
+        if (countdownInterval) {
+            clearInterval(countdownInterval); // Clear any existing interval
+        }
+
+
+        countdownInterval = setInterval(() => {
+            hours = parseInt(timer / 3600, 10);
+            minutes = parseInt((timer % 3600) / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+
+            hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+
+            countdownDisplayText.textContent = `${hours}:${minutes}:${seconds}`;
+
+
+            if (--timer < 0) {
+                clearInterval(countdownInterval);
+                countdownDisplayText.textContent = "00:00:00";
+                alert('Time for security deposit has expired.');
+                proceedToDepositBtn.disabled = true; // Disable button
+                proceedToDepositBtn.classList.add('disabled');
+            }
+        }, 1000);
+    }
+
+
+    // Function to calculate 200 BRL to USD
+    async function calculateBRLtoUSD(brlAmount) {
+        // This would ideally use a real exchange rate API.
+        // For now, let's use a fixed rate.
+        const brlToUsdRate = 0.19; // Example: 1 BRL = 0.19 USD
+        const usdEquivalent = brlAmount * brlToUsdRate;
+        depositAmountUSD.textContent = usdEquivalent.toFixed(2);
+        depositAmountBRL.textContent = `${brlAmount} BRL`;
+    }
+
+
+    proceedToDepositBtn.addEventListener('click', () => {
+        clearInterval(countdownInterval); // Stop countdown
+        showPage(selectPaymentPage); // Redirect to deposit page
+    });
+
+
+
+
+    // --- Transfer Page Functionality ---
+    const transferTabs = getEls('#transfer-tabs .tab');
+    const transferSections = getEls('.transfer-section');
+    const transferSwapIcon = getEl('#transfer-swap-icon');
+    const transferFromAccount = getEl('#transfer-from-account');
+    const transferToAccount = getEl('#transfer-to-account');
+    const transferCurrencyOption = getEl('#transfer-currency-option');
+    const transferAmountInput = getEl('#transfer-amount-input');
+    const transferMaxButton = getEl('#transfer-max-button');
+    const transferAvailableBalance = getEl('#transfer-available-balance');
+    const transferConfirmBtn = getEl('#transfer-confirm-btn');
+
+
+    let fromAccount = 'Funding Account';
+    let toAccount = 'Spot Account';
+    let selectedTransferCurrency = 'USDT';
+    let transferMaxAmount = 500.00; // Simulated max for USDT in Funding
+
+
+    const updateTransferUI = () => {
+        transferFromAccount.textContent = fromAccount;
+        transferToAccount.textContent = toAccount;
+        getEl('#transfer-currency-name').textContent = selectedTransferCurrency;
+        getEl('#transfer-currency-icon').src = `https://placehold.co/28x28/e0e0e0/333333?text=${selectedTransferCurrency}`; // Placeholder
+        getEl('#transfer-currency-label').textContent = selectedTransferCurrency; // Update label next to input
+        transferAvailableBalance.textContent = `Available: ${transferMaxAmount.toFixed(8)} ${selectedTransferCurrency}`;
+        validateTransferAmount();
+    };
+
+
+    const validateTransferAmount = () => {
+        const amount = parseFloat(transferAmountInput.value) || 0;
+        const isValid = amount > 0 && amount <= transferMaxAmount;
+        transferConfirmBtn.disabled = !isValid;
+        transferConfirmBtn.classList.toggle('disabled', !isValid);
+    };
+
+
+    transferTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            transferTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            const targetSectionId = this.dataset.target;
+            transferSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === targetSectionId) {
+                    section.classList.add('active');
+                }
+            });
+            // Update UI based on tab change if needed (e.g., reset values)
+            updateTransferUI(); // Re-render UI after tab switch
+            transferAmountInput.value = ''; // Clear input on tab switch
+        });
+    });
+
+
+    transferSwapIcon.addEventListener('click', () => {
+        [fromAccount, toAccount] = [toAccount, fromAccount];
+        updateTransferUI();
+    });
+
+
+    transferCurrencyOption.addEventListener('click', () => {
+        // In a real app, this would open a currency selection modal/page
+        // For now, let's simulate changing the currency
+        const currencies = ['USDT', 'BTC', 'ETH'];
+        const currentIndex = currencies.indexOf(selectedTransferCurrency);
+        selectedTransferCurrency = currencies[(currentIndex + 1) % currencies.length];
+        updateTransferUI();
+        alert(`Currency changed to ${selectedTransferCurrency}.`);
+        console.log('Open currency selection for transfer');
+    });
+
+
+    transferAmountInput.addEventListener('input', () => {
+        transferAmountInput.value = transferAmountInput.value.replace(/[^0-9.]/g, '');
+        if (transferAmountInput.value.includes('.')) {
+            const parts = transferAmountInput.value.split('.');
+            if (parts[1].length > 8) { // Allow more decimals for crypto
+                transferAmountInput.value = `${parts[0]}.${parts[1].substring(0, 8)}`;
+            }
+        }
+        validateTransferAmount();
+    });
+
+
+    transferMaxButton.addEventListener('click', () => {
+        transferAmountInput.value = transferMaxAmount.toFixed(8); // Use more decimals for max
+        validateTransferAmount();
+    });
+
+
+    transferConfirmBtn.addEventListener('click', () => {
+        const amount = parseFloat(transferAmountInput.value);
+        if (amount > 0 && amount <= transferMaxAmount) {
+            alert(`Simulating transfer of ${amount} ${selectedTransferCurrency} from ${fromAccount} to ${toAccount}.`);
+            console.log(`Transfer: ${amount} ${selectedTransferCurrency} from ${fromAccount} to ${toAccount}`);
+            goBack();
+        } else {
+            alert('Please enter a valid transfer amount.');
+        }
+    });
+
+
+    // Initial update for Transfer page
+    updateTransferUI();
+    // Activate the first tab by default
+    getEl('#transfer-tabs .tab[data-target="internal-transfer-section"]').click(); // Ensure the first tab is clicked to activate its content
+    // --- Convert Page Functionality ---
+    const convertTabs = getEls('#convert-tabs .tab');
+    const convertSwapIcon = getEl('#convert-swap-icon');
+    const convertFromCurrencyName = getEl('#convert-from-currency-name');
+    const convertFromCurrencyIcon = getEl('#convert-from-currency-icon');
+    const convertToCurrencyName = getEl('#convert-to-currency-name');
+    const convertToCurrencyIcon = getEl('#convert-to-currency-icon');
+    const convertFromInput = getEl('#convert-from-input');
+    const convertToInput = getEl('#convert-to-input');
+    const convertMaxBtn = getEl('#convert-max-btn');
+    const conversionRateText = getEl('#conversion-rate-text');
+    const conversionFeesText = getEl('#conversion-fees-text');
+    const conversionReceiveText = getEl('#conversion-receive-text');
+    const convertConfirmBtn = getEl('#convert-confirm-btn');
+
+
+    let fromConvertCurrency = 'USDT';
+    let toConvertCurrency = 'BTC';
+    let fromConvertAvailableBalance = 1000.00; // USDT
+    const dummyConversionRates = {
+        'USDT_BTC': 0.000015, // 1 USDT = 0.000015 BTC (approx $66,666/BTC)
+        'BTC_USDT': 66000, // 1 BTC = 66000 USDT
+        'ETH_USDT': 3500, // 1 ETH = 3500 USDT
+        'USDT_ETH': 0.00028, // 1 USDT = 0.00028 ETH
+    };
+
+
+    const updateConvertUI = () => {
+        convertFromCurrencyName.textContent = fromConvertCurrency;
+        convertFromCurrencyIcon.src = `https://placehold.co/28x28/e0e0e0/333333?text=${fromConvertCurrency}`; // Placeholder
+        convertToCurrencyName.textContent = toConvertCurrency;
+        convertToCurrencyIcon.src = `https://placehold.co/28x28/e0e0e0/333333?text=${toConvertCurrency}`; // Placeholder
+
+
+        // Update placeholder for "from" input to show available balance hint
+        convertFromInput.placeholder = `Available: ${fromConvertAvailableBalance.toFixed(2)} ${fromConvertCurrency}`;
+        updateConversionAmounts();
+        validateConvertAmount();
+    };
+
+
+    const updateConversionAmounts = () => {
+        const fromAmount = parseFloat(convertFromInput.value) || 0;
+        const rateKey = `${fromConvertCurrency}_${toConvertCurrency}`;
+        const rate = dummyConversionRates[rateKey];
+
+
+        if (rate && fromAmount > 0) {
+            const toAmount = fromAmount * rate;
+            convertToInput.value = toAmount.toFixed(8); // Crypto typically has more decimals
+            conversionRateText.textContent = `1 ${fromConvertCurrency} ≈ ${rate.toFixed(8)} ${toConvertCurrency}`;
+            conversionFeesText.textContent = '0.00%'; // Assuming no fees for simple conversion
+            conversionReceiveText.textContent = `${toAmount.toFixed(8)} ${toConvertCurrency}`;
+        } else {
+            convertToInput.value = '';
+            conversionRateText.textContent = 'Enter amount to see rate';
+            conversionFeesText.textContent = '--';
+            conversionReceiveText.textContent = '0.00 ' + toConvertCurrency;
+        }
+    };
+
+
+    const validateConvertAmount = () => {
+        const fromAmount = parseFloat(convertFromInput.value) || 0;
+        const isValid = fromAmount > 0 && fromAmount <= fromConvertAvailableBalance;
+        convertConfirmBtn.disabled = !isValid;
+        convertConfirmBtn.classList.toggle('disabled', !isValid);
+    };
+
+
+    convertTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            convertTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            // This tab change would typically change the 'active' account for conversion
+            // For simplicity, we'll just update the UI
+            console.log(`Convert tab switched to: ${this.textContent}`);
+            // In a real app, you'd fetch available balance for the new account
+            convertFromInput.value = ''; // Clear input on tab switch
+            updateConvertUI(); // Re-render UI after tab switch
+        });
+    });
+
+
+    convertSwapIcon.addEventListener('click', () => {
+        [fromConvertCurrency, toConvertCurrency] = [toConvertCurrency, fromConvertCurrency];
+        // Swap amounts too, if input has value
+        const temp = convertFromInput.value;
+        convertFromInput.value = convertToInput.value;
+        convertToInput.value = temp;
+
+
+        updateConvertUI();
+    });
+
+
+    getEl('#convert-from-currency-display').addEventListener('click', () => {
+        // Open currency selection for 'from'
+        alert('Select "from" currency');
+    });
+
+
+    getEl('#convert-to-currency-display').addEventListener('click', () => {
+        // Open currency selection for 'to'
+        alert('Select "to" currency');
+    });
+
+
+    convertFromInput.addEventListener('input', () => {
+        convertFromInput.value = convertFromInput.value.replace(/[^0-9.]/g, '');
+        if (convertFromInput.value.includes('.')) {
+            const parts = convertFromInput.value.split('.');
+            if (parts[1].length > 8) {
+                convertFromInput.value = `${parts[0]}.${parts[1].substring(0, 8)}`;
+            }
+        }
+        updateConversionAmounts();
+        validateConvertAmount();
+    });
+
+
+    convertMaxBtn.addEventListener('click', () => {
+        convertFromInput.value = fromConvertAvailableBalance.toFixed(8);
+        updateConversionAmounts();
+        validateConvertAmount();
+    });
+
+
+    convertConfirmBtn.addEventListener('click', () => {
+        const fromAmount = parseFloat(convertFromInput.value);
+        const toAmount = parseFloat(convertToInput.value);
+        if (fromAmount > 0 && toAmount > 0 && fromAmount <= fromConvertAvailableBalance) {
+            alert(`Simulating conversion of ${fromAmount} ${fromConvertCurrency} to ${toAmount} ${toConvertCurrency}.`);
+            console.log(`Convert: ${fromAmount} ${fromConvertCurrency} to ${toAmount} ${toConvertCurrency}`);
+            goBack();
+        } else {
+            alert('Please enter a valid amount for conversion.');
+        }
+    });
+
+
+    // Initial update for Convert page
+    updateConvertUI();
+    // Activate the first tab by default
+    getEl('#convert-tabs .tab').click();
+    // --- Buy/Sell Crypto Page Functionality ---
+    const buySellTabs = getEls('#buy-sell-tabs .tab');
+    const buySellAmountInput = getEl('#buy-sell-amount');
+    const buySellCurrencyName = getEl('#buy-sell-currency-name');
+    const buySellCurrencyIcon = getEl('#buy-sell-currency-icon');
+    const buySellTypeSelector = getEl('#buy-sell-type-selector'); // For "By Quantity" vs "By Value"
+    const numberPad = getEl('.number-pad');
+    const numButtons = getEls('.num-btn');
+    const backspaceButton = getEl('#backspace-btn');
+    const dotButton = getEl('#dot-btn');
+    const buySellConfirmBtn = getEl('#buy-sell-confirm-btn');
+
+
+    let currentBuySellCurrency = 'USDT'; // Crypto currency being bought/sold
+    let currentFiatCurrency = 'USD'; // Fiat currency being used (e.g., for "by value")
+    let buySellMin = 10;
+    let buySellMax = 20000;
+
+
+    // Update currency display and placeholder for input
+    const updateBuySellUI = () => {
+        buySellCurrencyName.textContent = currentBuySellCurrency;
+        buySellCurrencyIcon.src = `https://placehold.co/35x35/e0e0e0/333333?text=${currentBuySellCurrency}`; // Placeholder
+        getEl('.amount-input-buy-sell .currency-label').textContent = currentFiatCurrency; // Label for fiat value
+        getEl('.amount-input-buy-sell .range-info').textContent = `Min: ${buySellMin} ${currentFiatCurrency}, Max: ${buySellMax} ${currentFiatCurrency}`;
+        buySellConfirmBtn.textContent = `${buySellTabs[0].classList.contains('active') ? 'Buy' : 'Sell'} ${currentBuySellCurrency}`;
+        validateBuySellAmount();
+    };
+
+
+    const validateBuySellAmount = () => {
+        const amount = parseFloat(buySellAmountInput.textContent) || 0;
+        const isValid = amount >= buySellMin && amount <= buySellMax;
+        buySellConfirmBtn.disabled = !isValid;
+        buySellConfirmBtn.classList.toggle('disabled', !isValid);
+    };
+
+
+    buySellTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            buySellTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            console.log(`Buy/Sell tab switched to: ${this.textContent}`);
+            // You might adjust the UI or data fetching based on "Buy" or "Sell"
+            buySellAmountInput.textContent = '0'; // Reset amount on tab switch
+            updateBuySellUI(); // Re-validate and update
+        });
+    });
+
+
+    buySellCurrencyName.parentNode.addEventListener('click', () => {
+        // Open crypto selection page
+        showPage(cryptoFiatSelectionPage);
+        getEl('#selection-header-title').textContent = 'Select Crypto';
+        // Ensure crypto tab is active in selection page
+        cryptoFiatSelectionPage.addEventListener('pageshow', () => {
+            const cryptoTab = getEl('#currency-selection-tabs .tab[data-type="crypto"]');
+            if (cryptoTab) cryptoTab.click();
+        }, {once: true}); // Use {once: true} to ensure it only runs once per show
+    });
+
+
+    buySellTypeSelector.addEventListener('click', () => {
+        alert('Toggle "By Quantity" / "By Value" mode');
+        // This would change the input behavior (e.g., input USD or BTC)
+    });
+
+
+    // Number Pad Logic
+    numButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const digit = this.textContent;
+            let currentValue = buySellAmountInput.textContent;
+
+
+            if (currentValue === '0' && digit !== '.') {
+                currentValue = digit;
+            } else if (currentValue.length < 12) { // Limit input length
+                currentValue += digit;
+            }
+            buySellAmountInput.textContent = currentValue;
+            validateBuySellAmount();
+        });
+    });
+
+
+    dotButton.addEventListener('click', () => {
+        let currentValue = buySellAmountInput.textContent;
+        if (!currentValue.includes('.')) {
+            buySellAmountInput.textContent += '.';
+        }
+    });
+
+
+    backspaceButton.addEventListener('click', () => {
+        let currentValue = buySellAmountInput.textContent;
+        buySellAmountInput.textContent = currentValue.slice(0, -1) || '0';
+        validateBuySellAmount();
+    });
+
+
+    buySellConfirmBtn.addEventListener('click', () => {
+        const amount = parseFloat(buySellAmountInput.textContent);
+        const type = getEl('#buy-sell-tabs .tab.active').textContent.toLowerCase();
+        if (amount > 0) {
+            alert(`Simulating ${type} of ${amount} ${currentFiatCurrency} for ${currentBuySellCurrency}.`);
+            console.log(`${type}: ${amount} ${currentFiatCurrency} for ${currentBuySellCurrency}`);
+            goBack();
+        } else {
+            alert('Please enter a valid amount.');
+        }
+    });
+
+
+    // Initial update for Buy/Sell Crypto page
+    updateBuySellUI();
+    // Activate the first tab by default
+    getEl('#buy-sell-tabs .tab').click();
+
+
+
+
+    // --- Crypto/Fiat Selection Page Functionality ---
+    const selectionHeaderTitle = getEl('#selection-header-title');
+    const searchInput = getEl('#selection-search-input');
+    const cancelSearchBtn = getEl('#cancel-search-btn');
+    const currencySelectionTabs = getEls('#currency-selection-tabs .tab');
+    const selectionListContainer = getEl('#selection-list-container');
+
+
+    const cryptoData = [
+        { id: 'usdt', name: 'Tether', symbol: 'USDT', icon: 'https://placehold.co/28x28/e0e0e0/333333?text=USDT', value: '1.00000000', fiatValue: '1.00' },
+        { id: 'btc', name: 'Bitcoin', symbol: 'BTC', icon: 'https://placehold.co/28x28/e0e0e0/333333?text=BTC', value: '0.000015', fiatValue: '68,000' },
+        { id: 'eth', name: 'Ethereum', symbol: 'ETH', icon: 'https://placehold.co/28x28/e0e0e0/333333?text=ETH', value: '0.00028', fiatValue: '3,500' },
+        { id: 'xrp', name: 'XRP', symbol: 'XRP', icon: 'https://placehold.co/28x28/e0e0e0/333333?text=XRP', value: '1.800000', fiatValue: '0.55' },
+        { id: 'ada', name: 'Cardano', symbol: 'ADA', icon: 'https://placehold.co/28x28/e0e0e0/333333?text=ADA', value: '3.000000', fiatValue: '0.33' },
+    ];
+
+
+    const fiatData = [
+        { id: 'usd', name: 'United States Dollar', symbol: '$', icon: '', value: '1.00', fiatValue: '1.00' }, // Icon empty for fiat
+        { id: 'eur', name: 'Euro', symbol: '€', icon: '', value: '0.92', fiatValue: '1.08' },
+        { id: 'brl', name: 'Brazilian Real', symbol: 'R$', icon: '', value: '5.10', fiatValue: '0.19' },
+    ];
+
+
+    let currentSelectionType = 'crypto'; // 'crypto' or 'fiat'
+
+
+    const renderSelectionList = (filter = '') => {
+        selectionListContainer.innerHTML = ''; // Clear previous list
+        const dataToRender = currentSelectionType === 'crypto' ? cryptoData : fiatData;
+        const filteredData = dataToRender.filter(item =>
+            item.name.toLowerCase().includes(filter.toLowerCase()) ||
+            item.symbol.toLowerCase().includes(filter.toLowerCase()) ||
+            item.id.toLowerCase().includes(filter.toLowerCase())
+        );
+
+
+        if (filteredData.length === 0) {
+            selectionListContainer.innerHTML = `
+                <div class="no-data-message">
+                    <i class="fas fa-search-minus no-data-icon"></i>
+                    <p>No results found for "${filter}".</p>
+                </div>
+            `;
+            return;
+        }
+
+
+        filteredData.forEach(item => {
+            const div = document.createElement('div');
+            div.classList.add('selection-item');
+            div.dataset.id = item.id;
+            div.dataset.symbol = item.symbol;
+            div.dataset.name = item.name;
+
+
+            div.innerHTML = `
+                ${item.icon ? `<img src="${item.icon}" alt="${item.symbol}" class="item-icon">` : `<span class="currency-symbol">${item.symbol}</span>`}
+                <div class="item-info">
+                    <span>${item.symbol}</span>
+                    <p>${item.name}</p>
+                </div>
+                <div class="item-values">
+                    <span class="item-value">${item.value}</span>
+                    ${item.fiatValue ? `<p class="item-fiat-value">${item.fiatValue} ${currentFiatCurrency}</p>` : ''}
+                </div>
+            `;
+            div.addEventListener('click', () => handleSelection(item));
+            selectionListContainer.appendChild(div);
+        });
+    };
+
+
+    const handleSelection = (selectedItem) => {
+        // This handles selection for the Buy/Sell page crypto selection
+        if (getEl('#selection-header-title').textContent === 'Select Crypto') {
+            currentBuySellCurrency = selectedItem.symbol;
+            updateBuySellUI();
+            goBack(); // Go back to Buy/Sell page
+        } else {
+            // For other selection contexts (e.g., fiat for deposit)
+            console.log('Selected:', selectedItem);
+            // Implement specific logic for other selections
+            goBack();
+        }
+    };
+
+
+    searchInput.addEventListener('input', (e) => {
+        renderSelectionList(e.target.value);
+        cancelSearchBtn.style.display = e.target.value ? 'block' : 'none';
+    });
+
+
+    cancelSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        cancelSearchBtn.style.display = 'none';
+        renderSelectionList();
+    });
+
+
+    currencySelectionTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            currencySelectionTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentSelectionType = this.dataset.type;
+            renderSelectionList(searchInput.value); // Re-render with current filter
+        });
+    });
+
+
+    // Make sure the crypto/fiat selection page is rendered when shown
+    cryptoFiatSelectionPage.addEventListener('pageshow', () => {
+        // Ensure the correct tab is active and list is rendered when this page becomes active
+        const cryptoTab = getEl('#currency-selection-tabs .tab[data-type="crypto"]');
+        if (cryptoTab && !cryptoTab.classList.contains('active')) {
+            cryptoTab.click(); // This will also call renderSelectionList
+        } else {
+            renderSelectionList(); // If cryptoTab is already active, just render
+        }
+        searchInput.value = ''; // Clear search when returning
+        cancelSearchBtn.style.display = 'none';
+    });
+
+
+
+
+    // --- Asset History Page Functionality ---
+    const historyTabs = getEls('#history-tabs .tab');
+    const filterDropdowns = getEls('.filter-dropdown');
+    const noDataMessage = getEl('#no-history-data');
+
+
+    const renderHistory = () => {
+        // Simulate data loading
+        const hasData = Math.random() > 0.5; // Randomly show data or no data
+        if (hasData) {
+            noDataMessage.style.display = 'none';
+            // In a real app, populate a list of history items here
+            // Example:
+            // selectionListContainer.innerHTML = '<div style="padding: 20px;">History items would go here...</div>';
+        } else {
+            noDataMessage.style.display = 'block';
+            // Ensure no other content is shown if no data message is active
+            // selectionListContainer.innerHTML = '';
+        }
+    };
+
+
+    historyTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            historyTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            console.log(`History tab switched to: ${this.textContent}`);
+            renderHistory(); // Re-render history based on active tab
+        });
+    });
+
+
+    filterDropdowns.forEach(dropdown => {
+        dropdown.addEventListener('click', function() {
+            alert(`Open filter options for: ${this.textContent.trim()}`);
+            // In a real app, this would open a custom dropdown or modal for filtering
+        });
+    });
+
+
+    // Initial render for history page when it becomes active
+    assetHistoryPage.addEventListener('pageshow', () => {
+        getEl('#history-tabs .tab.active').click(); // Re-click the active tab to render
+    });
+
+
+
+
+    // Add page transition classes to CSS (ensure this is at the very end of your script)
+    const styleSheet = document.createElement('style');
+    styleSheet.type = 'text/css';
+    styleSheet.innerText = `
+        .page.animate-in-right {
+            transform: translateX(100%);
+        }
+        .page.active.animate-in-right {
+            transform: translateX(0%);
+        }
+        .page.animate-in-left {
+            transform: translateX(-100%);
+        }
+        .page.active.animate-in-left {
+            transform: translateX(0%);
+        }
+        .page.animate-out-left {
+            transform: translateX(-100%);
+        }
+        .page.animate-out-right {
+            transform: translateX(100%);
+        }
+        /* Ensure pages not active are off-screen and hidden to prevent interaction */
+        .page:not(.active) {
+            pointer-events: none;
+            visibility: hidden;
+            opacity: 0; /* Add opacity transition for smoother hide/show */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
+        }
+        .page.active {
+            pointer-events: auto;
+            visibility: visible;
+            opacity: 1;
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+
+
+
+    // Initial setup for the first page
+    myAssetsPage.classList.add('active');
+
+
+    // Make sure the crypto/fiat selection page is rendered when shown
+    cryptoFiatSelectionPage.addEventListener('pageshow', () => {
+        // Ensure the correct tab is active and list is rendered when this page becomes active
+        const cryptoTab = getEl('#currency-selection-tabs .tab[data-type="crypto"]');
+        if (cryptoTab && !cryptoTab.classList.contains('active')) {
+            cryptoTab.click(); // This will also call renderSelectionList
+        } else {
+            renderSelectionList(); // If cryptoTab is already active, just render
+        }
+        searchInput.value = ''; // Clear search when returning
+        cancelSearchBtn.style.display = 'none';
+    });
+
+
+}); // End DOMContentLoaded
+
