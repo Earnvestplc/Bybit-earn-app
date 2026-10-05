@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bybit Wallet UI</title>
+    <title>Carteira Bybit</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
 
-        <!-- My Assets Page -->
+        <!-- Meus ativos Page -->
         <div id="my-assets-page" class="page active">
             <div class="header">
                 <span class="icon-placeholder"></span> <!-- For alignment -->
-                <div class="header-title">My Assets</div>
+                <div class="header-title">Meus ativos</div>
                 <i class="fas fa-bell header-icon"></i>
             </div>
             <div class="content my-assets-content">
@@ -40,11 +40,11 @@
                     <button class="filter-btn">1Y</button>
                     <button class="filter-btn">ALL</button>
                 </div>
-                <p class="last-update">Last update: <span id="last-update-time">--:--:--</span></p>
+                <p class="last-update">Última atualização: <span id="last-update-time">--:--:--</span></p>
 
                 <div class="my-card">
-                    <img src="https://placehold.co/40x40/e0e0e0/333333?text=Card" alt="Card Icon" class="card-icon">
-                    <span class="card-text">My Card</span>
+                    <img src="https://placehold.co/40x40/e0e0e0/333333?text=Card" alt="Ícone do cartão" class="card-icon">
+                    <span class="card-text">Meu cartão</span>
                     <span class="card-number">**** **** **** 8888</span>
                     <i class="fas fa-chevron-right"></i>
                 </div>
@@ -52,70 +52,70 @@
                 <div class="action-buttons">
                     <button class="action-btn" id="deposit-fiat-btn">
                         <i class="fas fa-money-bill-wave"></i>
-                        <span>Deposit Fiat</span>
+                        <span>Depositar moeda fiduciária</span>
                     </button>
                     <button class="action-btn" id="withdrawal-fiat-btn">
                         <i class="fas fa-money-check-alt"></i>
-                        <span>Withdrawal Fiat</span>
+                        <span>Sacar moeda fiduciária</span>
                     </button>
                     <button class="action-btn" id="transfer-btn">
                         <i class="fas fa-exchange-alt"></i>
-                        <span>Transfer</span>
+                        <span>Transferir</span>
                     </button>
                     <button class="action-btn" id="convert-btn">
                         <i class="fas fa-sync-alt"></i>
-                        <span>Convert</span>
+                        <span>Converter</span>
                     </button>
                 </div>
 
                 <div class="action-buttons">
                     <button class="action-btn" id="buy-crypto-btn">
                         <i class="fas fa-arrow-alt-circle-up"></i>
-                        <span>Buy Crypto</span>
+                        <span>Comprar cripto</span>
                     </button>
                     <button class="action-btn" id="sell-crypto-btn">
                         <i class="fas fa-arrow-alt-circle-down"></i>
-                        <span>Sell Crypto</span>
+                        <span>Vender cripto</span>
                     </button>
                     <button class="action-btn">
                         <i class="fas fa-hand-holding-usd"></i>
-                        <span>Lend</span>
+                        <span>Emprestar</span>
                     </button>
                     <button class="action-btn">
                         <i class="fas fa-piggy-bank"></i>
-                        <span>Earn</span>
+                        <span>Ganhar</span>
                     </button>
                 </div>
 
                 <div class="account-asset-tabs">
-                    <button class="tab active">Account</button>
-                    <button class="tab">Assets</button>
+                    <button class="tab active">Conta</button>
+                    <button class="tab">Ativos</button>
                 </div>
 
                 <div class="funds-display" id="funds-display">
-                    <span class="funds-text">Total Funds</span>
+                    <span class="funds-text">Total de fundos</span>
                     <span class="funds-value">$13,489.02 <i class="fas fa-chevron-right"></i></span>
                 </div>
             </div>
         </div>
-                <!-- Select Payment Method Page -->
+                <!-- Selecionar método de pagamento Page -->
         <div id="select-payment-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Select Payment Method</div>
+                <div class="header-title">Selecionar método de pagamento</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content">
                 <div class="buy-crypto-fiat">
-                    <h3>Buy Fiat</h3>
+                    <h3>Comprar moeda fiduciária</h3>
                     <span class="currency-selector">USD <i class="fas fa-caret-down"></i></span>
                 </div>
 
                 <button class="payment-btn" id="deposit-pix-option">
                     <i class="fas fa-qrcode"></i>
                     <div class="btn-text">
-                        <h3>PIX Deposit</h3>
-                        <span>Instant transfer with zero fees</span>
+                        <h3>Depósito via PIX</h3>
+                        <span>Transferência instantânea sem taxas</span>
                     </div>
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -123,8 +123,8 @@
                 <button class="payment-btn" id="deposit-usdt-option">
                     <i class="fas fa-dollar-sign"></i>
                     <div class="btn-text">
-                        <h3>Deposit USDT</h3>
-                        <span>Transfer from other exchanges or wallets</span>
+                        <h3>Depositar USDT</h3>
+                        <span>Transfira de outras exchanges ou carteiras</span>
                     </div>
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -132,8 +132,8 @@
                 <button class="payment-btn">
                     <i class="fas fa-credit-card"></i>
                     <div class="btn-text">
-                        <h3>Credit/Debit Card</h3>
-                        <span>Instantly buy with your card</span>
+                        <h3>Cartão de crédito/débito</h3>
+                        <span>Compre instantaneamente com seu cartão</span>
                     </div>
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -141,24 +141,24 @@
                 <button class="payment-btn">
                     <i class="fas fa-bank"></i>
                     <div class="btn-text">
-                        <h3>Bank Transfer (SEPA)</h3>
-                        <span>Deposit EUR via SEPA</span>
+                        <h3>Transferência bancária (SEPA)</h3>
+                        <span>Deposite EUR via SEPA</span>
                     </div>
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Deposit PIX Value Page -->
+        <!-- Depósito PIX Value Page -->
         <div id="deposit-pix-value-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Deposit PIX</div>
+                <div class="header-title">Depósito PIX</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content">
                 <div class="input-group">
-                    <label for="pix-deposit-amount">Amount</label>
+                    <label for="pix-deposit-amount">Valor</label>
                     <div class="input-field-with-currency">
                         <input type="text" id="pix-deposit-amount" placeholder="0.00">
                         <span class="currency-tag">BRL <i class="fas fa-caret-down"></i></span>
@@ -167,13 +167,13 @@
                 </div>
 
                 <div class="payment-method-section">
-                    <h4>Payment Method</h4>
+                    <h4>Método de pagamento</h4>
                     <div class="method-option active">
                         <i class="fas fa-qrcode method-icon"></i>
                         <div class="method-details">
-                            <span>PIX Transfer</span>
-                            <span class="zero-taxes">Zero taxes</span>
-                            <span class="real-time">Real time</span>
+                            <span>Transferência PIX</span>
+                            <span class="zero-taxes">Sem taxas</span>
+                            <span class="real-time">Tempo real</span>
                         </div>
                         <i class="fas fa-check-circle radio-icon"></i>
                     </div>
@@ -182,185 +182,185 @@
 
                 <div class="deposit-summary">
                     <div class="summary-header">
-                        <h3>Deposit Summary</h3>
+                        <h3>Resumo do depósito</h3>
                         <i class="fas fa-question-circle"></i>
                     </div>
                     <div class="summary-item">
-                        <span>Amount</span>
+                        <span>Valor</span>
                         <span>R$ <span id="deposit-amount-summary">0.00</span></span>
                     </div>
                     <div class="summary-item">
-                        <span>Fee</span>
+                        <span>Taxa</span>
                         <span>R$ <span id="deposit-fee-summary">0.00</span></span>
                     </div>
                     <div class="total-pay">
-                        <span>Total to Pay</span>
+                        <span>Total a pagar</span>
                         <span>R$ <span id="total-pay-value">0.00</span></span>
                     </div>
                 </div>
 
-                <button class="bottom-button" id="confirm-deposit-btn">Confirm Deposit</button>
+                <button class="bottom-button" id="confirm-deposit-btn">Confirmar depósito</button>
             </div>
         </div>
 
-        <!-- Deposit PIX QR Page -->
+        <!-- Depósito PIX QR Page -->
         <div id="deposit-pix-qr-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Deposit PIX</div>
+                <div class="header-title">Depósito PIX</div>
                 <i class="fas fa-question-circle header-icon"></i>
             </div>
             <div class="content pix-qr-content">
                 <div class="deposit-details">
                     <div class="detail-row">
-                        <span>Deposit Amount</span>
+                        <span>Valor do depósito</span>
                         <span>R$ <span id="pix-deposit-amount-qr">0.00</span></span>
                     </div>
                     <div class="detail-row">
-                        <span>Fee</span>
+                        <span>Taxa</span>
                         <span>R$ <span id="pix-deposit-fee-qr">0.00</span></span>
                     </div>
                     <div class="detail-row">
-                        <span>Total Amount</span>
+                        <span>Valor total</span>
                         <span>R$ <span id="pix-total-amount-qr">0.00</span></span>
                     </div>
                 </div>
 
                 <div class="tabs-small" id="pix-qr-tabs">
-                    <button class="tab active">Scan QR Code</button>
-                    <button class="tab">Copy Key</button>
+                    <button class="tab active">Escanear código QR</button>
+                    <button class="tab">Copiar chave</button>
                 </div>
 
                 <div class="qr-code-section">
-                    <img src="https://placehold.co/180x180/e0e0e0/333333?text=PIX+QR" alt="PIX QR Code" class="qr-image" id="pix-qr-code-img">
-                    <p class="scan-qr-instruction">Scan the QR Code to complete the payment</p>
+                    <img src="https://placehold.co/180x180/e0e0e0/333333?text=PIX+QR" alt="Código QR do PIX" class="qr-image" id="pix-qr-code-img">
+                    <p class="scan-qr-instruction">Escaneie o código QR para concluir o pagamento</p>
                     <div class="qr-actions">
-                        <button class="secondary-btn" id="save-qr-btn"><i class="fas fa-download"></i> Save QR</button>
+                        <button class="secondary-btn" id="save-qr-btn"><i class="fas fa-download"></i> Salvar QR</button>
                         <button class="secondary-btn" id="share-qr-btn"><i class="fas fa-share-alt"></i> Share QR</button>
                     </div>
                 </div>
 
                 <div class="notice-box">
-                    <h4>Important Notice</h4>
-                    <p>Only transfer from an account with the same CPF/CNPJ. Transfers from third-party accounts will result in a refund within 3 business days.</p>
+                    <h4>Aviso importante</h4>
+                    <p>Transfira apenas de uma conta com o mesmo CPF/CNPJ. Transferências de contas de terceiros serão reembolsadas em até 3 dias úteis.</p>
                 </div>
 
                 <div class="input-group">
-                    <label>PIX Payment Code</label>
+                    <label>Código de pagamento PIX</label>
                     <div class="input-field-with-currency">
-                        <input type="text" id="pix-payment-code-text" value="Loading PIX Code..." readonly>
+                        <input type="text" id="pix-payment-code-text" value="Carregando código PIX..." readonly>
                         <i class="fas fa-copy copy-icon" id="copy-pix-code-btn"></i>
                     </div>
                 </div>
 
                 <div class="help-links">
-                    Need help? <a href="#">Tutorial <i class="fas fa-chevron-right"></i></a> | <a href="#">Contact Support <i class="fas fa-chevron-right"></i></a>
+                    Precisa de ajuda? <a href="#">Tutorial <i class="fas fa-chevron-right"></i></a> | <a href="#">Falar com o suporte <i class="fas fa-chevron-right"></i></a>
                 </div>
 
                 <div class="service-provider">
-                    Payment service provider: Settle Network
+                    Provedor do serviço de pagamento: Settle Rede
                 </div>
 
                 <div class="bottom-action-buttons">
-                    <button class="bottom-button" id="deposit-completed-btn">Deposit Completed</button>
+                    <button class="bottom-button" id="deposit-completed-btn">Depósito concluído</button>
                 </div>
             </div>
                       </div>
-                                                              <!-- Deposit USDT Page -->
+                                                              <!-- Depositar USDT Page -->
         <div id="deposit-usdt-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Deposit USDT</div>
+                <div class="header-title">Depositar USDT</div>
                 <i class="fas fa-question-circle header-icon"></i>
             </div>
             <div class="content usdt-deposit-content">
                 <div class="qr-code-section-large">
-                    <img src="https://placehold.co/220x220/e0e0e0/333333?text=USDT+QR" alt="USDT QR Code" class="qr-image-large" id="usdt-qr-code-img">
+                    <img src="https://placehold.co/220x220/e0e0e0/333333?text=USDT+QR" alt="Código QR do USDT" class="qr-image-large" id="usdt-qr-code-img">
                 </div>
 
                 <div class="wallet-address-box">
-                    <h4>Wallet Address</h4>
-                    <span id="usdt-wallet-address">Loading Address...</span>
+                    <h4>Endereço da carteira</h4>
+                    <span id="usdt-wallet-address">Carregando endereço...</span>
                     <i class="fas fa-copy copy-icon" id="copy-usdt-address-btn"></i>
                 </div>
 
                 <div class="deposit-info">
                     <div class="info-item">
-                        <span>Network</span>
+                        <span>Rede</span>
                         <span>TRC20 (TRON) <i class="fas fa-info-circle"></i></span>
                     </div>
                     <div class="info-item">
-                        <span>Minimum Deposit</span>
+                        <span>Depósito mínimo</span>
                         <span>1.00 USDT</span>
                     </div>
                     <div class="info-item">
-                        <span>Expected Arrival</span>
+                        <span>Chegada prevista</span>
                         <span>5-10 Minutes</span>
                     </div>
                     <div class="info-item">
-                        <span>Number of Confirmations</span>
-                        <span>20 (Network Confirmation)</span>
+                        <span>Número de confirmações</span>
+                        <span>20 (confirmações da rede)</span>
                     </div>
                 </div>
 
                 <div class="deposit-links">
-                    <a href="#">What is TRC20?</a> | <a href="#">Deposit FAQs</a>
+                    <a href="#">O que é TRC20?</a> | <a href="#">Perguntas frequentes sobre depósitos</a>
                 </div>
 
                 <div class="disclaimer-box">
-                    <p>Please note that only USDT deposits are supported on this address. Any other coin or token deposited to this address will be lost permanently.</p>
-                    <p>TRC20 is the only supported network for USDT deposits to this address. Do not use ERC20, OMNI, or other networks.</p>
+                    <p>Atenção: este endereço aceita apenas depósitos em USDT. Qualquer outra moeda ou token enviado para este endereço será perdido permanentemente.</p>
+                    <p>A rede TRC20 é a única aceita para depósitos em USDT neste endereço. Não use ERC20, OMNI ou outras redes.</p>
                 </div>
 
                 <div class="bottom-buttons-two">
-                    <button class="secondary-btn" id="save-qr-to-photo-btn"><i class="fas fa-image"></i> Save to Photos</button>
-                    <button class="primary-btn" id="deposit-usdt-done-btn">Done</button>
+                    <button class="secondary-btn" id="save-qr-to-photo-btn"><i class="fas fa-image"></i> Salvar nas fotos</button>
+                    <button class="primary-btn" id="deposit-usdt-done-btn">Concluído</button>
                 </div>
             </div>
         </div>
 
-        <!-- Saved Photo Modal -->
+        <!-- Modal de foto salva -->
         <div id="saved-photo-modal" class="modal-overlay">
             <div class="modal-content">
                 <i class="fas fa-times close-modal-button"></i>
                 <div class="modal-header">
-                    <h4>QR Code Saved to Photos</h4>
+                    <h4>Código QR salvo nas fotos</h4>
                 </div>
                 <div class="saved-photo-card">
-                    <h3>Deposit USDT</h3>
+                    <h3>Depositar USDT</h3>
                     <div class="network-info">
-                        Network: <span class="network-name">TRC20</span>
+                        Rede: <span class="network-name">TRC20</span>
                     </div>
-                    <img src="https://placehold.co/150x150/e0e0e0/333333?text=Saved+QR" alt="Saved QR Code" class="saved-qr-image" id="saved-photo-qr-image">
+                    <img src="https://placehold.co/150x150/e0e0e0/333333?text=Saved+QR" alt="Código QR salvo" class="saved-qr-image" id="saved-photo-qr-image">
                     <div class="wallet-address-saved">
-                        <h4>Wallet Address</h4>
-                        <span id="saved-photo-address">Loading Address...</span>
+                        <h4>Endereço da carteira</h4>
+                        <span id="saved-photo-address">Carregando endereço...</span>
                     </div>
-                    <p class="save-date">Saved on: <span id="saved-date">July 5, 2025</span></p>
-                    <img src="https://placehold.co/80x25/e0e0e0/333333?text=Logo" alt="Bybit Logo" class="bybit-logo">
+                    <p class="save-date">Salvo em: <span id="saved-date">July 5, 2025</span></p>
+                    <img src="https://placehold.co/80x25/e0e0e0/333333?text=Logo" alt="Logotipo da Bybit" class="bybit-logo">
                 </div>
 
                 <div class="theme-buttons">
-                    <button class="theme-btn active">Light Theme</button>
-                    <button class="theme-btn">Dark Theme</button>
+                    <button class="theme-btn active">Tema claro</button>
+                    <button class="theme-btn">Tema escuro</button>
                 </div>
 
                 <button class="download-image" id="download-qr-image">
-                    <i class="fas fa-download"></i> Download Image
+                    <i class="fas fa-download"></i> Baixar imagem
                 </button>
             </div>
         </div>
 
-        <!-- Fiat Withdrawal Page -->
+        <!-- Saque em moeda fiduciária Page -->
         <div id="fiat-withdrawal-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Fiat Withdrawal</div>
+                <div class="header-title">Saque em moeda fiduciária</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content">
                 <div class="input-group">
-                    <label for="withdrawal-amount">Amount</label>
+                    <label for="withdrawal-amount">Valor</label>
                     <div class="input-field-with-currency">
                         <input type="text" id="withdrawal-amount" placeholder="0.00">
                         <span class="currency-tag">USD <i class="fas fa-caret-down"></i></span>
@@ -368,17 +368,17 @@
                     </div>
                 </div>
                 <div class="balance-info">
-                    <span>Available: <span id="available-balance-text">13,489.02 USD</span></span>
+                    <span>Disponível: <span id="available-balance-text">13,489.02 USD</span></span>
                     <span><i class="fas fa-info-circle"></i></span>
                 </div>
 
                 <div class="payment-method-section">
-                    <h4>Withdrawal Method</h4>
+                    <h4>Método de saque</h4>
                     <div class="method-option active">
                         <i class="fas fa-bank method-icon"></i>
                         <div class="method-details">
-                            <span>Bank Transfer (Local)</span>
-                            <span class="real-time">Standard processing</span>
+                            <span>Transferência bancária (local)</span>
+                            <span class="real-time">Processamento padrão</span>
                         </div>
                         <i class="fas fa-check-circle radio-icon"></i>
                     </div>
@@ -387,39 +387,39 @@
 
                 <div class="deposit-summary">
                     <div class="summary-header">
-                        <h3>Withdrawal Summary</h3>
+                        <h3>Resumo do saque</h3>
                         <i class="fas fa-question-circle"></i>
                     </div>
                     <div class="summary-item">
-                        <span>Amount</span>
+                        <span>Valor</span>
                         <span>$ <span id="withdrawal-amount-summary">0.00</span></span>
                     </div>
                     <div class="summary-item">
-                        <span>Fee</span>
+                        <span>Taxa</span>
                         <span>$ <span id="withdrawal-fee-summary">0.00</span></span>
                     </div>
                     <div class="total-pay">
-                        <span>Total to Receive</span>
+                        <span>Total a receber</span>
                         <span>$ <span id="total-receive-value">0.00</span></span>
                     </div>
                 </div>
 
-                <button class="bottom-button" id="withdrawal-confirm-btn">Confirm Withdrawal</button>
+                <button class="bottom-button" id="withdrawal-confirm-btn">Confirmar saque</button>
             </div>
         </div>
 
-        <!-- NEW: Withdrawal Confirmation Page -->
+        <!-- Página de confirmação do saque -->
         <div id="withdrawal-confirmation-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Security Deposit</div>
+                <div class="header-title">Depósito de segurança</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content withdrawal-confirmation-content">
                 <div class="confirmation-message-box">
                     <i class="fas fa-exclamation-triangle warning-icon"></i>
                     <p>To proceed with your withdrawal, a security deposit is required.</p>
-                    <p>Please deposit <strong>$ <span id="deposit-amount-usd">0.00</span> USD</strong> (equivalent to <span id="deposit-amount-brl">200 BRL</span>) within the next <span id="countdown-timer">05:00:00</span>.</p>
+                    <p>Deposite <strong>$ <span id="deposit-amount-usd">0.00</span> USD</strong> (equivalente a <span id="deposit-amount-brl">200 BRL</span>) nos próximos <span id="countdown-timer">05:00:00</span>.</p>
                     <p class="small-text">This deposit ensures the security of your account and will be fully refundable upon successful withdrawal processing.</p>
                 </div>
 
@@ -428,29 +428,29 @@
                     <span>Time Remaining: <span id="countdown-display-text">05:00:00</span></span>
                 </div>
 
-                <button class="bottom-button" id="proceed-to-deposit-btn">Proceed to Deposit</button>
+                <button class="bottom-button" id="proceed-to-deposit-btn">Prosseguir para o depósito</button>
             </div>
         </div>
-                <!-- Transfer Page -->
+                <!-- Página de transferência -->
         <div id="transfer-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Transfer</div>
+                <div class="header-title">Transferir</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content">
                 <div class="transfer-tabs" id="transfer-tabs">
-                    <button class="tab active" data-target="internal-transfer-section">Internal Transfer</button>
-                    <button class="tab" data-target="external-transfer-section">External Transfer</button>
+                    <button class="tab active" data-target="internal-transfer-section">Transferência interna</button>
+                    <button class="tab" data-target="external-transfer-section">Transferência externa</button>
                 </div>
 
-                <!-- Internal Transfer Section (default active) -->
+                <!-- Transferência interna Section (default active) -->
                 <div id="internal-transfer-section" class="transfer-section active">
                     <div class="transfer-from-to">
                         <div class="transfer-item">
                             <span>From</span>
                             <div class="account-select">
-                                <span class="account-name" id="transfer-from-account">Funding Account</span>
+                                <span class="account-name" id="transfer-from-account">Funding Conta</span>
                                 <i class="fas fa-chevron-right"></i>
                             </div>
                         </div>
@@ -458,7 +458,7 @@
                         <div class="transfer-item">
                             <span>To</span>
                             <div class="account-select">
-                                <span class="account-name" id="transfer-to-account">Spot Account</span>
+                                <span class="account-name" id="transfer-to-account">Spot Conta</span>
                                 <i class="fas fa-chevron-right"></i>
                             </div>
                         </div>
@@ -474,19 +474,19 @@
                     </div>
 
                     <div class="amount-input-section">
-                        <h4>Amount</h4>
+                        <h4>Valor</h4>
                         <div class="amount-input-field">
                             <input type="text" id="transfer-amount-input" placeholder="0.00">
                             <span class="max-button" id="transfer-max-button">Max</span>
                             <span class="currency-label-input" id="transfer-currency-label">USDT</span>
                         </div>
-                        <p class="available-balance" id="transfer-available-balance">Available: 0.00 USDT</p>
+                        <p class="available-balance" id="transfer-available-balance">Disponível: 0.00 USDT</p>
                     </div>
 
-                    <button class="bottom-button" id="transfer-confirm-btn">Confirm Transfer</button>
+                    <button class="bottom-button" id="transfer-confirm-btn">Confirmar transferência</button>
                 </div>
 
-                <!-- External Transfer Section (hidden by default) - Placeholder for future implementation -->
+                <!-- Transferência externa Section (hidden by default) - Placeholder for future implementation -->
                 <div id="external-transfer-section" class="transfer-section">
                     <p>External transfer functionality would be displayed here.</p>
                     <p>e.g., Send crypto to an external wallet address.</p>
@@ -494,23 +494,23 @@
             </div>
         </div>
 
-        <!-- Convert Page -->
+        <!-- Converter Page -->
         <div id="convert-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Convert</div>
+                <div class="header-title">Converter</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content">
                 <div class="convert-tabs" id="convert-tabs">
-                    <button class="tab active">Spot Account</button>
-                    <button class="tab">Funding Account</</button>
-                    <button class="tab">Unified Trading Account</button>
+                    <button class="tab active">Spot Conta</button>
+                    <button class="tab">Funding Conta</</button>
+                    <button class="tab">Unified Trading Conta</button>
                 </div>
 
                 <div class="convert-account-info">
-                    <span>Account</span>
-                    <span class="account-name">Spot Account <i class="fas fa-caret-down"></i></span>
+                    <span>Conta</span>
+                    <span class="account-name">Spot Conta <i class="fas fa-caret-down"></i></span>
                 </div>
 
                 <div class="convert-pair-selection">
@@ -541,7 +541,7 @@
                         <span id="conversion-rate-text">Enter amount to see rate</span>
                     </div>
                     <div class="fees-section">
-                        <span>Fees</span>
+                        <span>Taxas</span>
                         <span id="conversion-fees-text">0.00%</span>
                     </div>
                     <div class="receive-section">
@@ -553,11 +553,11 @@
                 <button class="bottom-button" id="convert-confirm-btn">Confirm Conversion</button>
             </div>
         </div>
-                <!-- Buy/Sell Crypto Page -->
+                <!-- Buy/Vender cripto Page -->
         <div id="buy-sell-crypto-page" class="page">
             <div class="header">
                 <i class="fas fa-arrow-left back-button"></i>
-                <div class="header-title">Buy/Sell Crypto</div>
+                <div class="header-title">Buy/Vender cripto</div>
                 <span class="icon-placeholder"></span>
             </div>
             <div class="content buy-sell-content">
@@ -609,18 +609,18 @@
             </div>
         </div>
 
-        <!-- Crypto/Fiat Selection Page -->
+        <!-- Crypto/moeda fiduciária Selection Page -->
         <div id="crypto-fiat-selection-page" class="page">
             <div class="search-header">
-                <input type="text" placeholder="Search" id="selection-search-input">
-                <button class="cancel-search" id="cancel-search-btn">Cancel</button>
+                <input type="text" placeholder="Pesquisar" id="selection-search-input">
+                <button class="cancel-search" id="cancel-search-btn">Cancelar</button>
             </div>
             <div class="header"> <!-- Re-using header style for title only -->
                 <i class="fas fa-arrow-left back-button"></i>
                 <div class="header-title" id="selection-header-title">Select Crypto</div>
                 <div class="currency-tabs" id="currency-selection-tabs">
                     <button class="tab active" data-type="crypto">Crypto</button>
-                    <button class="tab" data-type="fiat">Fiat</button>
+                    <button class="tab" data-type="fiat">moeda fiduciária</button>
                 </div>
             </div>
             <div class="content selection-list" id="selection-list-container">
@@ -638,10 +638,10 @@
             <div class="content asset-history-content">
                 <div class="history-tabs" id="history-tabs">
                     <button class="tab active">All</button>
-                    <button class="tab">Deposit</button>
-                    <button class="tab">Withdrawal</button>
-                    <button class="tab">Transfer</button>
-                    <button class="tab">Convert</button>
+                    <button class="tab">Depósito</button>
+                    <button class="tab">Saque</button>
+                    <button class="tab">Transferir</button>
+                    <button class="tab">Converter</button>
                     <button class="tab">Trade</button>
                 </div>
 
